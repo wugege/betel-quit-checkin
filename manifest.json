@@ -1,0 +1,19 @@
+{
+  "name": "戒槟榔 · 省钱打卡",
+  "short_name": "省钱打卡",
+  "description": "每忍住一次槟榔，账本 +30 元；锻炼打卡给具体练法。",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#eef2f6",
+  "theme_color": "#0f9d76",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

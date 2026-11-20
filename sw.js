@@ -1,5 +1,5 @@
-var CACHE = 'habit-coach-v1';
-var ASSETS = ['./', './index.html', './manifest.json', './icon.svg'];
+var CACHE = 'habit-coach-v2';
+var ASSETS = ['./', './index.html', './manifest.json', './icon.svg', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', function (e) {
   e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(ASSETS); }));
@@ -33,8 +33,8 @@ self.addEventListener('message', function (e) {
   if (e.data && e.data.type === 'notify') {
     self.registration.showNotification(e.data.title, {
       body: e.data.body,
-      icon: 'icon.svg',
-      badge: 'icon.svg',
+      icon: 'icon-192.png',
+      badge: 'icon-192.png',
       tag: 'habit-coach'
     });
   }

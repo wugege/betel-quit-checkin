@@ -8,7 +8,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="省钱打卡">
 <link rel="manifest" href="manifest.json">
-<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icon-192.png">
 <title>戒槟榔 · 省钱打卡</title>
 <style>
   :root{
@@ -460,7 +461,7 @@
       if(navigator.serviceWorker&&navigator.serviceWorker.controller){
         navigator.serviceWorker.controller.postMessage({type:'notify',title:title,body:body});
       }else{
-        new Notification(title,{body:body,icon:'icon.svg'});
+        new Notification(title,{body:body,icon:'icon-192.png'});
       }
     }catch(e){}
   }

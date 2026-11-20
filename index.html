@@ -57,7 +57,9 @@
   .btn-orange{background:linear-gradient(135deg,#fb923c,#ea580c);color:#fff;
     box-shadow:0 10px 22px rgba(249,115,22,.22)}
   .btn-ghost{background:var(--card);color:var(--red);border:1.5px solid #f7d4d4}
+  .btn-slip{background:var(--card);color:#b45309;border:1.5px solid #fde68a}
   .btn.done{background:var(--green-l);color:var(--green-d);box-shadow:none;border:1px solid #bfe8d8}
+  .btn-slip.done{background:#fffbeb;color:#92400e}
   .btn .arrow{font-size:22px;opacity:.85}
   .card{background:var(--card);border-radius:20px;padding:18px;box-shadow:var(--shadow)}
   .progress-top{display:flex;justify-content:space-between;font-size:13px;align-items:center}
@@ -66,11 +68,23 @@
   .bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#34d399,#0f9d76);
     width:0;transition:width .6s ease}
   .milestone-note{font-size:12px;color:var(--muted)}
+  /* 戒断阶段 */
+  .stage-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+  .stage-head b{font-size:17px;color:var(--green-d)}
+  .stage-head span{font-size:12px;color:var(--muted)}
+  .stages{display:flex;gap:6px}
+  .stages i{flex:1;height:8px;border-radius:99px;background:#eef1f5;transition:.3s}
+  .stages i.on{background:linear-gradient(90deg,#34d399,#0f9d76)}
+  .stages-lbl{display:flex;gap:6px;margin-top:7px}
+  .stages-lbl span{flex:1;text-align:center;font-size:10px;color:var(--muted)}
+  .stages-lbl span.on{color:var(--green-d);font-weight:700}
+  .stage-tip{font-size:12px;color:var(--muted);line-height:1.7;margin-top:12px;background:#f7f9fc;padding:11px 12px;border-radius:12px}
   .week{display:flex;gap:8px;justify-content:space-between}
   .day{flex:1;text-align:center}
   .day .box{height:52px;border-radius:14px;background:#f1f4f8;display:flex;flex-direction:column;
     align-items:center;justify-content:center;gap:4px;font-size:10px;color:var(--muted)}
   .day .box.has-b{background:var(--green-l);color:var(--green-d)}
+  .day .box.has-s{background:#fffbeb;color:#b45309}
   .day .box.has-e{background:var(--orange-l);color:#c2410c}
   .day .box.has-b.has-e{background:linear-gradient(135deg,var(--green-l),var(--orange-l))}
   .day .d{font-size:11px;color:var(--muted);margin-top:6px}
@@ -78,6 +92,12 @@
   .legend span:before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;
     background:var(--green);margin-right:5px}
   .legend span+span:before{background:var(--orange)}
+  .legend span+span+span:before{background:#f59e0b}
+  /* 嘴瘾分析 */
+  .ana-row{display:flex;justify-content:space-between;font-size:13px;padding:8px 0;border-bottom:1px solid var(--line)}
+  .ana-row:last-of-type{border-bottom:none}
+  .ana-row b{color:var(--orange)}
+  .ana-tip{font-size:12px;color:var(--green-d);line-height:1.7;margin-top:12px;background:var(--green-l);padding:11px 12px;border-radius:12px}
   .mini-row{display:flex;gap:10px;margin-top:12px}
   .mini{flex:1;background:var(--card);border-radius:16px;padding:13px 10px;box-shadow:var(--shadow);
     border:none;cursor:pointer;font-size:12.5px;color:var(--ink);font-weight:600}
@@ -108,11 +128,18 @@
     padding:13px;font-size:16px;background:#fff;color:var(--ink);font-family:inherit}
   .toast{position:fixed;left:50%;bottom:34px;transform:translateX(-50%) translateY(20px);
     background:#1b2433;color:#fff;padding:12px 20px;border-radius:99px;font-size:14px;
-    opacity:0;pointer-events:none;transition:.25s;z-index:99;white-space:nowrap;max-width:90vw}
+    opacity:0;pointer-events:none;transition:.25s;z-index:99;white-space:normal;text-align:center;
+    max-width:86vw;line-height:1.5}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   .timer{font-size:56px;font-weight:800;text-align:center;color:var(--green-d);
     font-variant-numeric:tabular-nums;margin:10px 0}
   .action-hint{text-align:center;font-size:15px;font-weight:700;margin-bottom:10px}
+  .scene-wrap{margin:4px 0 16px}
+  .scene-label{font-size:12px;color:var(--muted);margin-bottom:9px}
+  .scenes{display:flex;flex-wrap:wrap;gap:8px}
+  .scene{border:1.5px solid var(--line);border-radius:99px;padding:7px 13px;font-size:12px;
+    background:#fff;cursor:pointer;color:var(--ink)}
+  .scene.sel{border-color:var(--orange);background:var(--orange-l);color:#c2410c;font-weight:700}
   .hidden{display:none!important}
 </style>
 </head>
@@ -134,6 +161,14 @@
     <div class="stat e"><div class="num" id="streakE">0</div><div class="lbl">本周锻炼（次）</div></div>
   </div>
 
+  <div class="section-title">戒断进度</div>
+  <div class="card">
+    <div class="stage-head"><b id="stageName">准备出发</b><span id="stageDay">还没开始</span></div>
+    <div class="stages" id="stages"></div>
+    <div class="stages-lbl" id="stagesLbl"></div>
+    <div class="stage-tip" id="stageTip"></div>
+  </div>
+
   <div class="section-title">今天打卡</div>
   <div class="actions">
     <button class="btn btn-primary" id="betelBtn">
@@ -143,7 +178,10 @@
       <span>今天练了<small id="exerciseSub">点一下，给你今天的练法</small></span><span class="arrow">›</span>
     </button>
     <button class="btn btn-ghost" id="urgeBtn">
-      <span>嘴瘾上来了 → 3 分钟急救<small>跳绳 / 深蹲 / 爬楼，撑过去再打卡</small></span><span class="arrow">›</span>
+      <span>嘴瘾上来了 → 3 分钟急救<small>先记下场景，再动起来，撑过去再打卡</small></span><span class="arrow">›</span>
+    </button>
+    <button class="btn btn-slip hidden" id="slipBtn">
+      <span>今天没撑住<small id="slipSub">记下来，不扣钱、不清零，明天继续</small></span><span class="arrow">›</span>
     </button>
   </div>
 
@@ -157,7 +195,12 @@
   <div class="section-title">最近 7 天</div>
   <div class="card">
     <div class="week" id="week"></div>
-    <div class="legend"><span>忍住没嚼</span><span>锻炼了</span></div>
+    <div class="legend"><span>忍住没嚼</span><span>锻炼了</span><span>没撑住</span></div>
+  </div>
+
+  <div class="section-title hidden" id="urgeAnalysisTitle">你的嘴瘾规律</div>
+  <div class="card hidden" id="urgeAnalysis">
+    <div id="urgeAnalysisBody"></div>
   </div>
 
   <div class="mini-row">
@@ -178,6 +221,10 @@
   <!-- 嘴瘾急救 -->
   <div class="mask" id="urgeMask"><div class="sheet">
     <h3>3 分钟急救</h3><div class="sub">嘴瘾峰值就这几分钟，动起来它就掉了</div>
+    <div class="scene-wrap">
+      <div class="scene-label">刚才为什么想嚼？（选一个，帮你找规律）</div>
+      <div class="scenes" id="scenes"></div>
+    </div>
     <div class="timer" id="timer">3:00</div>
     <div class="action-hint" id="urgeHint">现在：跳绳 1 分钟，别停</div>
     <button class="go hidden" id="urgeDone">撑过去了，打卡 +¥30</button>
@@ -216,6 +263,25 @@
   var DEFAULT={price:30,times:['08:00','15:00','21:00'],records:[]};
   var state=load();
 
+  var STAGES=[
+    {name:'准备出发',tip:'今天从"忍住一次"开始。手边备好水和薄荷糖，嘴瘾来了先灌一大口水。'},
+    {name:'起步',tip:'第 1 天。把家里的槟榔清掉，不留"应急包"。今天最难的是开头，你已经开始了。'},
+    {name:'最难，扛住就赢',tip:'第 2–3 天：烦躁、犯困、注意力散——这是戒断反应，不是你意志力差。嘴瘾来了就动 3 分钟，撑过去就赢了一半。'},
+    {name:'渴求下降',tip:'第 4–7 天：渴求开始明显下降。继续用运动替代，你会发现不嚼也能过一天。'},
+    {name:'习惯成型',tip:'第 8–14 天：新习惯在成型。别松懈，这个阶段最容易"觉得没事了"然后破戒。'},
+    {name:'你已经是另一种人',tip:'第 15 天以后：槟榔不再是你的必需品。保持锻炼，把省下的钱花在真正想要的东西上。'}
+  ];
+  var STAGE_MARKS=[1,3,7,14,30];
+  var STAGE_LABELS=['第1天','第3天','第7天','第14天','第30天'];
+  var SCENES=[
+    {id:'meal',n:'饭后',a:'吃完立刻漱口或刷牙，离开餐桌，别给嘴留空档。'},
+    {id:'drive',n:'开车',a:'上车先含一颗薄荷糖或嚼口香糖，手和嘴都占住。'},
+    {id:'code',n:'写代码卡住',a:'卡壳不是靠槟榔解决的。起身深蹲 20 个，回来思路反而通。'},
+    {id:'tired',n:'下午犯困',a:'这是最常见触发点。犯困就去跳绳 3 分钟或冷水洗脸，比槟榔提神更持久。'},
+    {id:'stress',n:'压力大',a:'压力不会因槟榔变小。先做 3 分钟急救，把情绪和动作分开。'},
+    {id:'bored',n:'无聊',a:'找件占用手和嘴的事：喝水、嚼口香糖。无聊是习惯的温床。'}
+  ];
+
   function load(){
     try{
       var raw=localStorage.getItem(KEY);
@@ -233,7 +299,6 @@
   function has(type,day){
     return state.records.some(function(r){return r.type===type && r.date===(day||dstr());});
   }
-  function count(type,day){ return state.records.filter(function(r){return r.type===type&&r.date===day;}).length; }
   function saved(){ return state.records.filter(function(r){return r.type==='betel';}).length*state.price; }
   function streak(type){
     var n=0, d=new Date();
@@ -258,19 +323,87 @@
     {v:5000,t:'升级全套装备'}
   ];
 
+  function renderStages(){
+    var day=streak('betel'), idx=0;
+    if(day>=15) idx=5; else if(day>=8) idx=4; else if(day>=4) idx=3;
+    else if(day>=2) idx=2; else if(day>=1) idx=1;
+    $('stageName').textContent=STAGES[idx].name;
+    var sl=has('slip');
+    $('stageDay').textContent=(day>0?('已连续 '+day+' 天'):'还没开始')+(sl?' · 今天记了没撑住，数字保留':'');
+    var bars='', lbls='';
+    for(var i=0;i<STAGE_MARKS.length;i++){
+      var on=day>=STAGE_MARKS[i];
+      bars+='<i class="'+(on?'on':'')+'"></i>';
+      lbls+='<span class="'+(on?'on':'')+'">'+STAGE_LABELS[i]+'</span>';
+    }
+    $('stages').innerHTML=bars;
+    $('stagesLbl').innerHTML=lbls;
+    $('stageTip').textContent=STAGES[idx].tip;
+  }
+
+  function renderUrgeAnalysis(){
+    var urges=state.records.filter(function(r){return r.type==='urge'&&r.scene;});
+    var box=$('urgeAnalysis'), ttl=$('urgeAnalysisTitle');
+    if(urges.length<3){ box.classList.add('hidden'); ttl.classList.add('hidden'); return; }
+    ttl.classList.remove('hidden'); box.classList.remove('hidden');
+    var m={};
+    urges.forEach(function(r){ m[r.scene]=(m[r.scene]||0)+1; });
+    var arr=Object.keys(m).map(function(k){return {id:k,c:m[k]};}).sort(function(a,b){return b.c-a.c;});
+    var top=arr[0], total=urges.length;
+    var pct=Math.round(top.c/total*100);
+    var advice=SCENES.filter(function(s){return s.id===top.id;})[0];
+    var nameOf=function(id){
+      var s=SCENES.filter(function(z){return z.id===id;})[0];
+      return s?s.n:id;
+    };
+    var html='';
+    arr.slice(0,3).forEach(function(x){
+      html+='<div class="ana-row"><span>'+nameOf(x.id)+'</span><b>'+x.c+' 次 · '+Math.round(x.c/total*100)+'%</b></div>';
+    });
+    html+='<div class="ana-tip">你的嘴瘾 <b>'+pct+'%</b> 来自「'+nameOf(top.id)+'」。下次这个场景一到，直接执行：'+
+      (advice?advice.a:'先动 3 分钟。')+'</div>';
+    $('urgeAnalysisBody').innerHTML=html;
+  }
+
   function render(){
     var s=saved();
     $('saved').textContent=money(s);
     $('heroS').textContent='已攒下 '+(s/state.price)+' 包槟榔钱 · 每忍住一次 +¥'+state.price;
     $('streakB').textContent=streak('betel');
     $('streakE').textContent=weekExercise();
-    var b=has('betel'), e=has('exercise');
-    $('betelBtn').className='btn '+(b?'done':'btn-primary');
-    $('betelSub').textContent=b?'今天已打卡，明天继续':'点一下，账本 +¥'+state.price;
-    $('betelBtn').querySelector('.arrow').textContent=b?'✓':'›';
+    var b=has('betel'), e=has('exercise'), sl=has('slip');
+
+    if(sl){
+      $('betelBtn').className='btn done';
+      $('betelSub').textContent='今天记了没撑住，明天重新来';
+      $('betelBtn').querySelector('.arrow').textContent='·';
+    }else if(b){
+      $('betelBtn').className='btn done';
+      $('betelSub').textContent='今天已打卡，明天继续';
+      $('betelBtn').querySelector('.arrow').textContent='✓';
+    }else{
+      $('betelBtn').className='btn btn-primary';
+      $('betelSub').textContent='点一下，账本 +¥'+state.price;
+      $('betelBtn').querySelector('.arrow').textContent='›';
+    }
     $('exerciseBtn').className='btn '+(e?'done':'btn-orange');
     $('exerciseSub').textContent=e?'今天已练，牛':'点一下，给你今天的练法';
     $('exerciseBtn').querySelector('.arrow').textContent=e?'✓':'›';
+
+    if(b){
+      $('slipBtn').classList.add('hidden');
+    }else{
+      $('slipBtn').classList.remove('hidden');
+      if(sl){
+        $('slipBtn').className='btn btn-slip done';
+        $('slipSub').textContent='今天已记下，明天继续';
+        $('slipBtn').querySelector('.arrow').textContent='✓';
+      }else{
+        $('slipBtn').className='btn btn-slip';
+        $('slipSub').textContent='记下来，不扣钱、不清零，明天继续';
+        $('slipBtn').querySelector('.arrow').textContent='›';
+      }
+    }
 
     var next=MILESTONES.find(function(m){return m.v>s;});
     if(next){
@@ -288,17 +421,19 @@
     var html='', names=['日','一','二','三','四','五','六'];
     for(var i=6;i>=0;i--){
       var d=new Date(); d.setDate(d.getDate()-i);
-      var ds=dstr(d), hb=has('betel',ds), he=has('exercise',ds);
-      html+='<div class="day"><div class="box'+(hb?' has-b':'')+(he?' has-e':'')+'">'+
-        (hb?'<span>✓</span>':'')+(he?'<span>⚡</span>':'')+'</div>'+
+      var ds=dstr(d), hb=has('betel',ds), hs=has('slip',ds), he=has('exercise',ds);
+      html+='<div class="day"><div class="box'+(hb?' has-b':'')+(hs?' has-s':'')+(he?' has-e':'')+'">'+
+        (hb?'<span>✓</span>':'')+(hs?'<span>·</span>':'')+(he?'<span>⚡</span>':'')+'</div>'+
         '<div class="d">'+(i===0?'今天':names[d.getDay()])+'</div></div>';
     }
     $('week').innerHTML=html;
+    renderStages();
+    renderUrgeAnalysis();
   }
 
   function toast(msg){
     var t=$('toast'); t.textContent=msg; t.classList.add('show');
-    clearTimeout(t._t); t._t=setTimeout(function(){t.classList.remove('show');},2000);
+    clearTimeout(t._t); t._t=setTimeout(function(){t.classList.remove('show');},2600);
   }
   function fly(){
     var f=$('float'); f.textContent='+¥'+state.price;
@@ -306,6 +441,7 @@
   }
   function checkinBetel(){
     if(has('betel')){ toast('今天已经打过卡了'); return; }
+    if(has('slip')){ toast('今天记了没撑住，明天重新来，别纠结'); return; }
     state.records.push({date:dstr(),type:'betel',value:state.price,ts:Date.now()});
     save(); render(); fly(); toast('爽！又省下 ¥'+state.price);
     notify('打卡成功','又忍住一天，省下 ¥'+state.price);
@@ -315,6 +451,14 @@
 
   $('betelBtn').onclick=checkinBetel;
   $('exerciseBtn').onclick=function(){ renderPlans(); openMask('exMask'); };
+  $('slipBtn').onclick=function(){
+    if(has('betel')) return;
+    if(has('slip')){ toast('今天已经记过了，明天继续'); return; }
+    if(!confirm('记一次"没撑住"？不扣钱，连续天数也不会清零。')) return;
+    state.records.push({date:dstr(),type:'slip',ts:Date.now()});
+    save(); render();
+    toast('记下了。一次没撑住不代表失败，明天继续。');
+  };
   $('settingsBtn').onclick=function(){
     $('priceInput').value=state.price;
     $('t1').value=state.times[0]||'08:00';
@@ -322,10 +466,22 @@
     $('t3').value=state.times[2]||'21:00';
     openMask('setMask');
   };
+
+  var selectedScene='';
+  function renderScenes(){
+    $('scenes').innerHTML=SCENES.map(function(s){
+      return '<span class="scene'+(s.id===selectedScene?' sel':'')+'" data-s="'+s.id+'">'+s.n+'</span>';
+    }).join('');
+  }
+  $('scenes').onclick=function(ev){
+    var t=ev.target.closest('.scene'); if(!t) return;
+    selectedScene=t.dataset.s; renderScenes();
+  };
   $('urgeBtn').onclick=function(){
+    selectedScene=''; renderScenes();
     $('timer').textContent='3:00'; $('urgeDone').classList.add('hidden');
     $('urgeStart').classList.remove('hidden');
-    $('urgeHint').textContent='点开始，然后立刻动起来';
+    $('urgeHint').textContent='先选场景，点开始，然后立刻动起来';
     openMask('urgeMask');
   };
 
@@ -398,7 +554,12 @@
     $('timer').textContent=m+':'+String(s).padStart(2,'0');
   }
   $('urgeDone').onclick=function(){
-    closeMask('urgeMask'); checkinBetel();
+    closeMask('urgeMask');
+    if(selectedScene){
+      state.records.push({date:dstr(),type:'urge',scene:selectedScene,ts:Date.now()});
+      save(); render();
+    }
+    checkinBetel();
   };
 
   $('saveSet').onclick=function(){
@@ -418,7 +579,7 @@
   };
 
   $('installBtn').onclick=function(){
-    toast('iPhone：Safari 分享 → 添加到主屏幕；安卓：浏览器菜单 → 添加到主屏幕');
+    toast('安卓 Chrome：右上角三个点 → 安装应用 / 添加到主屏幕');
   };
   $('dataBtn').onclick=function(){ openMask('dataMask'); };
   $('exportBtn').onclick=function(){
@@ -483,6 +644,7 @@
   }
   render();
   renderPlans();
+  renderScenes();
 })();
 </script>
 </body>

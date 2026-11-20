@@ -1,4 +1,4 @@
-var CACHE = 'habit-coach-v2';
+var CACHE = 'habit-coach-v3';
 var ASSETS = ['./', './index.html', './manifest.json', './icon.svg', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', function (e) {

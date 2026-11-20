@@ -6,11 +6,11 @@
 <meta name="theme-color" content="#0f9d76">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="省钱打卡">
+<meta name="apple-mobile-web-app-title" content="戒槟打卡">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icon-192.png">
-<title>戒槟榔 · 省钱打卡</title>
+<title>戒槟打卡 · 为了身体</title>
 <style>
   :root{
     --bg:#eef2f6; --card:#fff; --ink:#1b2433; --muted:#718096;
@@ -34,7 +34,7 @@
   .hero-label{font-size:13px;opacity:.85;letter-spacing:1px}
   .hero-amount{font-size:52px;font-weight:800;line-height:1.18;margin-top:4px;position:relative;z-index:1;
     font-variant-numeric:tabular-nums}
-  .hero-amount .yen{font-size:26px;vertical-align:top;margin-right:2px;opacity:.9}
+  .hero-amount .unit{font-size:22px;margin-left:6px;opacity:.9;font-weight:700}
   .hero-sub{font-size:12.5px;opacity:.82;margin-top:6px}
   .float{position:absolute;right:22px;top:24px;font-size:22px;font-weight:800;color:#fff;
     pointer-events:none;opacity:0;animation:floatUp 1.2s ease-out forwards;z-index:2}
@@ -145,19 +145,19 @@
 </head>
 <body>
   <div class="top">
-    <div class="brand"><span class="dot"></span>省钱打卡</div>
+    <div class="brand"><span class="dot"></span>戒槟打卡</div>
     <button class="icon-btn" id="settingsBtn" aria-label="设置">⚙</button>
   </div>
 
   <div class="hero" id="hero">
-    <div class="hero-label">累计省下的钱</div>
-    <div class="hero-amount"><span class="yen">¥</span><span id="saved">0</span></div>
-    <div class="hero-sub" id="heroS">每忍住一次，就赚回一包槟榔钱</div>
-    <div class="float" id="float">+¥30</div>
+    <div class="hero-label">坚持戒槟</div>
+    <div class="hero-amount"><span id="days">0</span><span class="unit">天</span></div>
+    <div class="hero-sub" id="heroS">每忍住一次，身体就少受一份罪</div>
+    <div class="float" id="float">+1 天</div>
   </div>
 
   <div class="stats">
-    <div class="stat b"><div class="num" id="streakB">0</div><div class="lbl">连续没嚼（天）</div></div>
+    <div class="stat b"><div class="num" id="totalCount">0</div><div class="lbl">累计忍住（次）</div></div>
     <div class="stat e"><div class="num" id="streakE">0</div><div class="lbl">本周锻炼（次）</div></div>
   </div>
 
@@ -172,7 +172,7 @@
   <div class="section-title">今天打卡</div>
   <div class="actions">
     <button class="btn btn-primary" id="betelBtn">
-      <span>我忍住了，没嚼<small id="betelSub">点一下，账本 +¥30</small></span><span class="arrow">›</span>
+      <span>我忍住了，没嚼<small id="betelSub">点一下，身体少受一份罪，顺带 +¥30</small></span><span class="arrow">›</span>
     </button>
     <button class="btn btn-orange" id="exerciseBtn">
       <span>今天练了<small id="exerciseSub">点一下，给你今天的练法</small></span><span class="arrow">›</span>
@@ -181,15 +181,15 @@
       <span>嘴瘾上来了 → 3 分钟急救<small>先记下场景，再动起来，撑过去再打卡</small></span><span class="arrow">›</span>
     </button>
     <button class="btn btn-slip hidden" id="slipBtn">
-      <span>今天没撑住<small id="slipSub">记下来，不扣钱、不清零，明天继续</small></span><span class="arrow">›</span>
+      <span>今天没撑住<small id="slipSub">记下来，不清零，明天继续</small></span><span class="arrow">›</span>
     </button>
   </div>
 
-  <div class="section-title">省钱目标</div>
+  <div class="section-title">顺带省下的钱</div>
   <div class="card">
     <div class="progress-top"><span id="mLabel">下一个奖励</span><b id="mAmount">¥0 / ¥300</b></div>
     <div class="bar"><i id="mBar"></i></div>
-    <div class="milestone-note" id="mNote">省下的钱是真实的，别花在槟榔上。</div>
+    <div class="milestone-note" id="mNote">身体是主账，这笔钱是顺带的。</div>
   </div>
 
   <div class="section-title">最近 7 天</div>
@@ -234,7 +234,7 @@
   <!-- 设置 -->
   <div class="mask" id="setMask"><div class="sheet">
     <h3>设置</h3><div class="sub">改成你自己的规则</div>
-    <label class="f">一包槟榔多少钱</label>
+    <label class="f">一包槟榔多少钱（只用来顺带记账）</label>
     <input type="number" id="priceInput" min="1" step="1" value="30">
     <label class="f">提醒时间 1（早上）</label><input type="time" id="t1" value="08:00">
     <label class="f">提醒时间 2（下午犯困）</label><input type="time" id="t2" value="15:00">
@@ -269,7 +269,7 @@
     {name:'最难，扛住就赢',tip:'第 2–3 天：烦躁、犯困、注意力散——这是戒断反应，不是你意志力差。嘴瘾来了就动 3 分钟，撑过去就赢了一半。'},
     {name:'渴求下降',tip:'第 4–7 天：渴求开始明显下降。继续用运动替代，你会发现不嚼也能过一天。'},
     {name:'习惯成型',tip:'第 8–14 天：新习惯在成型。别松懈，这个阶段最容易"觉得没事了"然后破戒。'},
-    {name:'你已经是另一种人',tip:'第 15 天以后：槟榔不再是你的必需品。保持锻炼，把省下的钱花在真正想要的东西上。'}
+    {name:'你已经是另一种人',tip:'第 15 天以后：槟榔不再是你的必需品。保持锻炼，把力气花在让身体更好的事上。'}
   ];
   var STAGE_MARKS=[1,3,7,14,30];
   var STAGE_LABELS=['第1天','第3天','第7天','第14天','第30天'];
@@ -367,9 +367,9 @@
 
   function render(){
     var s=saved();
-    $('saved').textContent=money(s);
-    $('heroS').textContent='已攒下 '+(s/state.price)+' 包槟榔钱 · 每忍住一次 +¥'+state.price;
-    $('streakB').textContent=streak('betel');
+    $('days').textContent=streak('betel');
+    $('totalCount').textContent=state.records.filter(function(r){return r.type==='betel';}).length;
+    $('heroS').textContent='顺带省下 ¥'+money(s)+' · 每忍住一次，身体少受一份罪';
     $('streakE').textContent=weekExercise();
     var b=has('betel'), e=has('exercise'), sl=has('slip');
 
@@ -383,7 +383,7 @@
       $('betelBtn').querySelector('.arrow').textContent='✓';
     }else{
       $('betelBtn').className='btn btn-primary';
-      $('betelSub').textContent='点一下，账本 +¥'+state.price;
+      $('betelSub').textContent='点一下，身体少受一份罪，顺带 +¥'+state.price;
       $('betelBtn').querySelector('.arrow').textContent='›';
     }
     $('exerciseBtn').className='btn '+(e?'done':'btn-orange');
@@ -400,7 +400,7 @@
         $('slipBtn').querySelector('.arrow').textContent='✓';
       }else{
         $('slipBtn').className='btn btn-slip';
-        $('slipSub').textContent='记下来，不扣钱、不清零，明天继续';
+        $('slipSub').textContent='记下来，不清零，明天继续';
         $('slipBtn').querySelector('.arrow').textContent='›';
       }
     }
@@ -410,7 +410,7 @@
       $('mLabel').textContent='下一个奖励：'+next.t;
       $('mAmount').textContent='¥'+money(s)+' / ¥'+money(next.v);
       $('mBar').style.width=Math.min(100,s/next.v*100)+'%';
-      $('mNote').textContent='再攒 ¥'+money(next.v-s)+' 就能兑现，别拿去嚼了。';
+      $('mNote').textContent='再攒 ¥'+money(next.v-s)+' 就能兑现，把身体养好比什么都值。';
     }else{
       $('mLabel').textContent='全部达成，你赢了';
       $('mAmount').textContent='¥'+money(s);
@@ -436,15 +436,15 @@
     clearTimeout(t._t); t._t=setTimeout(function(){t.classList.remove('show');},2600);
   }
   function fly(){
-    var f=$('float'); f.textContent='+¥'+state.price;
+    var f=$('float'); f.textContent='+1 天';
     f.style.animation='none'; void f.offsetWidth; f.style.animation='floatUp 1.2s ease-out forwards';
   }
   function checkinBetel(){
     if(has('betel')){ toast('今天已经打过卡了'); return; }
     if(has('slip')){ toast('今天记了没撑住，明天重新来，别纠结'); return; }
     state.records.push({date:dstr(),type:'betel',value:state.price,ts:Date.now()});
-    save(); render(); fly(); toast('爽！又省下 ¥'+state.price);
-    notify('打卡成功','又忍住一天，省下 ¥'+state.price);
+    save(); render(); fly(); toast('撑住了！身体又轻松一天');
+    notify('打卡成功','又忍住一天，身体少受一份罪');
   }
   function openMask(id){ $(id).classList.add('show'); }
   function closeMask(id){ $(id).classList.remove('show'); }
@@ -454,7 +454,7 @@
   $('slipBtn').onclick=function(){
     if(has('betel')) return;
     if(has('slip')){ toast('今天已经记过了，明天继续'); return; }
-    if(!confirm('记一次"没撑住"？不扣钱，连续天数也不会清零。')) return;
+    if(!confirm('记一次"没撑住"？连续天数不会清零。')) return;
     state.records.push({date:dstr(),type:'slip',ts:Date.now()});
     save(); render();
     toast('记下了。一次没撑住不代表失败，明天继续。');
@@ -545,7 +545,7 @@
         clearInterval(timerId);
         $('urgeHint').textContent='搞定了，回去记一笔';
         $('urgeDone').classList.remove('hidden');
-        notify('急救完成','现在去打卡，省下 ¥'+state.price);
+        notify('急救完成','现在去打卡，身体又轻松一天');
       }
     },1000);
   };
@@ -585,7 +585,7 @@
   $('exportBtn').onclick=function(){
     var blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
     var a=document.createElement('a'); a.href=URL.createObjectURL(blob);
-    a.download='省钱打卡备份-'+dstr()+'.json'; a.click();
+    a.download='戒槟打卡备份-'+dstr()+'.json'; a.click();
     toast('已导出，存到微信收藏或网盘');
   };
   $('importBtn').onclick=function(){ $('fileInput').click(); };

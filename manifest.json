@@ -1,7 +1,7 @@
 {
-  "name": "戒槟榔 · 省钱打卡",
-  "short_name": "省钱打卡",
-  "description": "每忍住一次槟榔，账本 +30 元；锻炼打卡给具体练法。",
+  "name": "戒槟打卡 · 为了身体",
+  "short_name": "戒槟打卡",
+  "description": "戒槟榔、练身体。每忍住一次，身体少受一份罪。",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
